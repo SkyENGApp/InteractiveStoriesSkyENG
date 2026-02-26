@@ -2,230 +2,605 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Dracula: King of Darkness – An Interactive Gothic Novel</title>
+  <title>Interactive Stories: Sky ENG – Gothic Visual Novel Anthology</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="An interactive gothic romance where your choices shape the fate of Dracula and Mina. Experience the epic journey from 1489 Wallachia to Victorian London.">
-  
+  <meta name="description" content="Two gothic visual novels. One cursed bloodline. Dracula: King of Darkness and Dracula II: The Inheritance — completely free, no locked chapters, no registration.">
+
   <link rel="icon" type="image/png" href="icon.png">
   <link rel="apple-touch-icon" href="icon.png">
-  
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  
+
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+
   <style>
-    /* CSS maintained from previous version */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
     :root {
-      --blood-red: #8b0000;
-      --vampire-gold: #c5a059;
-      --deep-black: #050505;
-      --shadow-gray: #a0a0a0;
-      --soft-white: #e0e0e0;
+      --blood:       #8b0000;
+      --blood-light: #b00000;
+      --gold:        #c5a059;
+      --gold-dim:    #8a6e3a;
+      --black:       #050505;
+      --near-black:  #0c0c0c;
+      --dark-panel:  #111111;
+      --mid-gray:    #2a2a2a;
+      --shadow-gray: #888;
+      --soft-white:  #e0e0e0;
+      --white:       #f5f5f5;
     }
 
     html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
     body {
-      font-family: 'Inter', sans-serif;
-      background: var(--deep-black);
+      font-family: 'Crimson Pro', Georgia, serif;
+      background: var(--black);
       color: var(--soft-white);
       overflow-x: hidden;
-      line-height: 1.6;
+      line-height: 1.7;
+      font-size: 17px;
     }
 
-    h1, h2, h3, .nav-logo { font-family: 'Cinzel', serif; }
+    h1, h2, h3, h4, .nav-logo, .game-label, .act-num, .ending-letter {
+      font-family: 'Cinzel', serif;
+    }
 
+    /* ── NAV ── */
     .top-nav {
       width: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      border-bottom: 1px solid rgba(139, 0, 0, 0.3);
+      background: rgba(0,0,0,0.97);
+      border-bottom: 1px solid rgba(139,0,0,0.35);
       position: sticky;
       top: 0;
       z-index: 1000;
+      backdrop-filter: blur(8px);
     }
-
     .nav-container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 12px 24px;
+      padding: 13px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-
     .nav-logo-group { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-    .nav-icon { width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--vampire-gold); }
-    .nav-logo { font-size: 18px; color: var(--blood-red); text-transform: uppercase; letter-spacing: 2px; }
+    .nav-icon { width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--gold-dim); }
+    .nav-logo { font-size: 15px; color: var(--blood-light); text-transform: uppercase; letter-spacing: 3px; }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a {
+      color: var(--shadow-gray);
+      text-decoration: none;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: color 0.2s;
+      font-family: 'Cinzel', serif;
+    }
+    .nav-links a:hover { color: var(--gold); }
 
+    /* ── HERO (Game 1) ── */
     .hero {
       position: relative;
-      min-height: 85vh;
+      min-height: 90vh;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      background: var(--deep-black);
+      background: var(--black);
     }
-
     .hero-bg {
       position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
+      inset: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
-      opacity: 0.6;
-      mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+      opacity: 0.55;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 55%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 55%, transparent 100%);
     }
-
     .hero-content {
       position: relative;
       z-index: 2;
       text-align: center;
       padding: 20px;
-      max-width: 900px;
+      max-width: 960px;
+      animation: fadeUp 1.2s ease both;
     }
-
-    h1 {
-      font-size: clamp(48px, 10vw, 90px);
-      margin-bottom: 10px;
-      color: #fff;
-      text-shadow: 0 0 20px rgba(139, 0, 0, 0.8);
-      text-transform: uppercase;
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-
-    .tagline { 
-        font-size: clamp(18px, 3vw, 26px); 
-        color: var(--vampire-gold); 
-        margin-bottom: 40px; 
-        font-style: italic;
-        letter-spacing: 1px;
-    }
-
-    .cta-button {
+    .anthology-label {
       display: inline-block;
-      padding: 18px 45px;
-      background: var(--blood-red);
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      padding: 6px 18px;
+      margin-bottom: 28px;
+      opacity: 0.85;
+    }
+    .hero h1 {
+      font-size: clamp(50px, 10vw, 96px);
+      color: var(--white);
+      text-shadow: 0 0 40px rgba(139,0,0,0.7), 0 2px 0 rgba(0,0,0,0.9);
+      text-transform: uppercase;
+      line-height: 1.05;
+      margin-bottom: 8px;
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2.5vw, 22px);
+      color: var(--gold);
+      font-style: italic;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+    }
+    .hero-tagline {
+      font-size: clamp(14px, 1.8vw, 18px);
+      color: var(--shadow-gray);
+      margin-bottom: 46px;
+      font-style: italic;
+    }
+
+    .cta-group { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .cta-primary {
+      display: inline-block;
+      padding: 17px 44px;
+      background: var(--blood);
       color: white;
       text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 3px;
-      border: 1px solid var(--vampire-gold);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      transition: 0.3s ease;
+      border: 1px solid var(--gold-dim);
+      box-shadow: 0 8px 28px rgba(139,0,0,0.4);
+      transition: all 0.3s ease;
     }
-
-    .chapters { max-width: 1100px; margin: 0 auto; padding: 100px 20px; }
-    .section-header { text-align: center; margin-bottom: 80px; }
-    .section-title { font-size: 48px; color: var(--vampire-gold); text-transform: uppercase; margin-bottom: 10px; }
-    .section-subtitle { color: var(--shadow-gray); letter-spacing: 2px; text-transform: uppercase; font-size: 14px; }
-
-    .chapter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-
-    .chapter-card {
-      padding: 40px;
-      background: linear-gradient(145deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.9));
-      border: 1px solid rgba(197, 160, 89, 0.1);
-      position: relative;
-      transition: 0.4s;
+    .cta-primary:hover { background: var(--blood-light); box-shadow: 0 12px 36px rgba(139,0,0,0.6); transform: translateY(-2px); }
+    .cta-secondary {
+      display: inline-block;
+      padding: 17px 44px;
+      background: transparent;
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      border: 1px solid var(--gold-dim);
+      transition: all 0.3s ease;
     }
+    .cta-secondary:hover { background: rgba(197,160,89,0.08); transform: translateY(-2px); }
 
-    /* PRIVACY SECTION STYLING */
-    .privacy-section {
-      max-width: 800px;
+    /* ── DIVIDER ── */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      max-width: 600px;
       margin: 0 auto;
-      padding: 80px 20px;
-      color: var(--shadow-gray);
-      font-size: 15px;
+      padding: 0 20px;
     }
-    .privacy-section h2 { color: var(--vampire-gold); margin-bottom: 20px; text-align: center; }
-    .privacy-section h3 { color: var(--soft-white); margin: 25px 0 10px 0; font-size: 18px; }
+    .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(197,160,89,0.3), transparent); }
+    .divider-diamond {
+      width: 8px; height: 8px;
+      border: 1px solid var(--gold-dim);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
 
-    footer { text-align: center; padding: 80px 20px; background: #020202; border-top: 1px solid rgba(139, 0, 0, 0.2); }
-    .footer-links { margin-bottom: 30px; }
-    .footer-links a { color: var(--vampire-gold); text-decoration: none; margin: 0 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-    .footer-copy { font-size: 12px; color: #444; margin-top: 20px; }
+    /* ── SECTION SHELL ── */
+    .section-wrap { max-width: 1120px; margin: 0 auto; padding: 100px 24px; }
+    .section-head { text-align: center; margin-bottom: 70px; }
+    .section-label {
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: var(--gold-dim);
+      margin-bottom: 14px;
+    }
+    .section-title { font-size: clamp(32px, 5vw, 48px); color: var(--gold); text-transform: uppercase; }
+    .section-body { color: var(--shadow-gray); font-size: 16px; margin-top: 14px; max-width: 600px; margin-left: auto; margin-right: auto; font-style: italic; }
+
+    /* ── GAME DIPTYCH ── */
+    .game-diptych { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    @media (max-width: 768px) { .game-diptych { grid-template-columns: 1fr; } }
+
+    .game-panel {
+      background: var(--dark-panel);
+      border: 1px solid rgba(197,160,89,0.1);
+      padding: 52px 44px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.4s;
+    }
+    .game-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--blood), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .game-panel:hover { border-color: rgba(197,160,89,0.3); }
+    .game-panel:hover::before { opacity: 1; }
+
+    .game-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: var(--blood-light);
+      margin-bottom: 18px;
+      display: block;
+    }
+    .game-panel h3 { font-size: 26px; color: var(--white); margin-bottom: 10px; line-height: 1.2; }
+    .game-panel .game-setting {
+      font-size: 13px;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      font-family: 'Cinzel', serif;
+    }
+    .game-panel p { color: var(--shadow-gray); font-size: 16px; line-height: 1.8; margin-bottom: 18px; }
+    .game-stats { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(197,160,89,0.1); }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Cinzel', serif; font-size: 28px; color: var(--gold); display: block; line-height: 1; }
+    .stat-label { font-size: 12px; color: var(--shadow-gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    /* ── ACT STRUCTURE ── */
+    .acts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .act-card {
+      padding: 36px 32px;
+      background: linear-gradient(145deg, rgba(20,20,20,0.95), rgba(10,10,10,0.95));
+      border: 1px solid rgba(197,160,89,0.08);
+      position: relative;
+      transition: all 0.4s;
+    }
+    .act-card:hover { border-color: rgba(197,160,89,0.25); transform: translateY(-4px); }
+    .act-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(139,0,0,0.5), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s;
+    }
+    .act-card:hover::after { transform: scaleX(1); }
+    .act-num {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--blood-light);
+      margin-bottom: 14px;
+      display: block;
+    }
+    .act-card h4 { font-size: 18px; color: var(--white); margin-bottom: 10px; line-height: 1.3; }
+    .act-card p { color: var(--shadow-gray); font-size: 15px; line-height: 1.75; }
+
+    /* ── ENDINGS ── */
+    .endings-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    @media (max-width: 700px) { .endings-strip { grid-template-columns: 1fr; } }
+
+    .ending-card {
+      padding: 44px 36px;
+      background: var(--dark-panel);
+      border: 1px solid rgba(197,160,89,0.08);
+      position: relative;
+      transition: all 0.35s;
+      text-align: center;
+    }
+    .ending-card:hover { background: rgba(20,20,20,1); border-color: rgba(197,160,89,0.25); }
+    .ending-letter {
+      font-size: 52px;
+      color: var(--blood);
+      display: block;
+      line-height: 1;
+      margin-bottom: 16px;
+      text-shadow: 0 0 20px rgba(139,0,0,0.4);
+    }
+    .ending-card h4 { font-size: 17px; color: var(--gold); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .ending-card p { color: var(--shadow-gray); font-size: 15px; line-height: 1.8; font-style: italic; }
+    .ending-note { font-size: 13px; color: var(--gold-dim); margin-top: 12px; font-style: normal; font-family: 'Cinzel', serif; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ── FREE BAND ── */
+    .free-band {
+      background: linear-gradient(135deg, rgba(139,0,0,0.12) 0%, rgba(0,0,0,0) 60%);
+      border-top: 1px solid rgba(139,0,0,0.2);
+      border-bottom: 1px solid rgba(139,0,0,0.2);
+      padding: 70px 24px;
+      text-align: center;
+    }
+    .free-band h2 { font-size: clamp(28px, 4vw, 42px); color: var(--white); margin-bottom: 16px; }
+    .free-band p { color: var(--shadow-gray); font-size: 17px; max-width: 580px; margin: 0 auto 32px; font-style: italic; }
+    .free-pills { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .pill {
+      padding: 9px 22px;
+      border: 1px solid rgba(197,160,89,0.25);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* ── PRIVACY ── */
+    .privacy-section {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 90px 24px;
+    }
+    .privacy-section h2 { font-size: 36px; color: var(--gold); margin-bottom: 8px; text-align: center; }
+    .privacy-section .updated { text-align: center; color: var(--shadow-gray); font-size: 14px; margin-bottom: 50px; font-style: italic; }
+    .privacy-section h3 { font-size: 17px; color: var(--soft-white); margin: 34px 0 10px; font-family: 'Cinzel', serif; letter-spacing: 0.5px; }
+    .privacy-section p { color: var(--shadow-gray); font-size: 16px; line-height: 1.8; }
+    .privacy-section a { color: var(--blood-light); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 80px 24px;
+      background: #020202;
+      border-top: 1px solid rgba(139,0,0,0.2);
+    }
+    .footer-logo { font-family: 'Cinzel', serif; font-size: 20px; color: var(--blood); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 28px; }
+    .footer-links { margin-bottom: 28px; }
+    .footer-links a { color: var(--gold-dim); text-decoration: none; margin: 0 18px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-family: 'Cinzel', serif; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy { font-size: 12px; color: #333; margin-top: 18px; }
   </style>
 </head>
 <body>
 
+<!-- ── NAV ── -->
 <nav class="top-nav">
   <div class="nav-container">
     <a href="#" class="nav-logo-group">
       <img src="icon.png" alt="Icon" class="nav-icon">
-      <span class="nav-logo">Dracula</span>
+      <span class="nav-logo">Interactive Stories</span>
     </a>
-    <div style="display: flex; gap: 25px;">
-        <a href="#story" style="color: var(--soft-white); text-decoration: none; font-size: 13px; text-transform: uppercase;">Story</a>
-        <a href="#privacy" style="color: var(--soft-white); text-decoration: none; font-size: 13px; text-transform: uppercase;">Privacy</a>
-        <a href="mailto:codelovin@outlook.com" style="color: var(--soft-white); text-decoration: none; font-size: 13px; text-transform: uppercase;">Support</a>
+    <div class="nav-links">
+      <a href="#games">Games</a>
+      <a href="#story">Story</a>
+      <a href="#endings">Endings</a>
+      <a href="#privacy">Privacy</a>
+      <a href="mailto:codelovin@outlook.com">Support</a>
     </div>
   </div>
 </nav>
 
+<!-- ── HERO ── -->
 <section class="hero">
   <img src="title_card.png" alt="Dracula: King of Darkness Title Card" class="hero-bg">
   <div class="hero-content">
+    <div class="anthology-label">Interactive Stories: Sky ENG</div>
     <h1>King of Darkness</h1>
-    <p class="tagline">Some loves are so profound that even doing the "right thing" feels cruel.</p>
-    <a href="https://apps.apple.com/app/id6755718958" class="cta-button">Enter the Abyss</a>
-  </div>
-</section>
-
-<section class="chapters" id="story">
-  <div class="section-header">
-    <span class="section-subtitle">The Tale of Love and Loss</span>
-    <h2 class="section-title">Act Structure</h2>
-  </div>
-
-  <div class="chapter-grid">
-    <div class="chapter-card">
-      <span class="chapter-num">Prologue</span>
-      <h3 class="chapter-title">The Pledge to Darkness</h3>
-      <p class="chapter-desc">1489, Wallachia. Witness Vlad’s fall from a noble prince to a hunter of souls after the brutal murder of his family.</p>
-    </div>
-
-    <div class="chapter-card">
-      <span class="chapter-num">Act II</span>
-      <h3 class="chapter-title">Mina and the Look</h3>
-      <p class="chapter-desc">In the sunlit archives of London, a reunion turns cold. Mina senses a recognition in the shadows—a memory of a past life as Elena.</p>
-    </div>
-
-    <div class="chapter-card">
-      <span class="chapter-num">Act IV</span>
-      <h3 class="chapter-title">Mina Confesses</h3>
-      <p class="chapter-desc">As reality fractures, Alicia Van Helsing makes the ultimate sacrifice to protect the man she silently loves.</p>
-    </div>
-
-    <div class="chapter-card">
-      <span class="chapter-num">Act V</span>
-      <h3 class="chapter-title">The Cruel Choice</h3>
-      <p class="chapter-desc">The Cathedral collapses. Will you release Mina to her eternal love, or strike down the King of Darkness?</p>
+    <p class="hero-sub">A Gothic Visual Novel Anthology</p>
+    <p class="hero-tagline">Two games. One cursed bloodline. 600 years of consequence — and the choice that ends it.</p>
+    <div class="cta-group">
+      <a href="https://apps.apple.com/app/id6755718958" class="cta-primary">Download Free</a>
+      <a href="#games" class="cta-secondary">Explore Both Games</a>
     </div>
   </div>
 </section>
 
+<!-- ── GAMES OVERVIEW ── -->
+<section id="games">
+  <div class="section-wrap" style="padding-bottom: 0;">
+    <div class="section-head">
+      <span class="section-label">The Anthology</span>
+      <h2 class="section-title">Two Complete Stories</h2>
+      <p class="section-body">Both games are free, fully voiced, and richly illustrated. No locked chapters. No registration. Start with either — but the full picture only emerges when you've played both.</p>
+    </div>
+  </div>
+
+  <div style="max-width: 1120px; margin: 0 auto; padding: 0 24px 100px;">
+    <div class="game-diptych">
+
+      <div class="game-panel">
+        <span class="game-label">Game 1</span>
+        <h3>Dracula: King of Darkness</h3>
+        <div class="game-setting">1489 Wallachia · Victorian London</div>
+        <p>Before Dracula was a monster, he was Vlad — a prince who loved a farm girl named Elena more than his crown, his throne, and his soul. When fate tears that love away, darkness offers him a deal.</p>
+        <p>Playing as the ill-fated Jonathan Harker, you witness the consequences of a 400-year grief so vast it consumed a man whole. Three dramatically different endings await.</p>
+        <div class="game-stats">
+          <div class="stat"><span class="stat-num">5</span><span class="stat-label">Acts</span></div>
+          <div class="stat"><span class="stat-num">3</span><span class="stat-label">Endings</span></div>
+          <div class="stat"><span class="stat-num">2–4h</span><span class="stat-label">Gameplay</span></div>
+        </div>
+      </div>
+
+      <div class="game-panel">
+        <span class="game-label">Game 2</span>
+        <h3>Dracula II: The Inheritance</h3>
+        <div class="game-setting">London 2026 · Wallachia 1431 · Adrianople 1442</div>
+        <p>Jonathan Harker III has been drawing the same road — the same woman — since he was fifteen. He does not know why. Alecia Van Helsing does.</p>
+        <p>A time-crossing gothic mystery: from modern Baker Street to the court of Vlad Dracul himself, before the darkness took him. Watch a man choose his fate in real time. Try to stop the chain that made the monster.</p>
+        <div class="game-stats">
+          <div class="stat"><span class="stat-num">6</span><span class="stat-label">Acts</span></div>
+          <div class="stat"><span class="stat-num">38</span><span class="stat-label">Chapters</span></div>
+          <div class="stat"><span class="stat-num">3</span><span class="stat-label">Endings</span></div>
+          <div class="stat"><span class="stat-num">5–8h</span><span class="stat-label">Gameplay</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+
+<!-- ── ACT STRUCTURE (Game 1) ── -->
+<section id="story">
+  <div class="section-wrap">
+    <div class="section-head">
+      <span class="section-label">Dracula: King of Darkness</span>
+      <h2 class="section-title">Act Structure</h2>
+      <p class="section-body">The tale of love, grief, and the darkness that answers when both are taken.</p>
+    </div>
+
+    <div class="acts-grid">
+      <div class="act-card">
+        <span class="act-num">Prologue</span>
+        <h4>The Pledge to Darkness</h4>
+        <p>1489, Wallachia. Witness Vlad's fall from a noble prince to a hunter of souls after the brutal murder of his family. A love story becomes a deal with darkness.</p>
+      </div>
+      <div class="act-card">
+        <span class="act-num">Act II</span>
+        <h4>Mina and the Look</h4>
+        <p>In the sunlit archives of London, a reunion turns cold. Mina senses a recognition in the shadows — a memory of a past life as Elena.</p>
+      </div>
+      <div class="act-card">
+        <span class="act-num">Act IV</span>
+        <h4>Mina Confesses</h4>
+        <p>As reality fractures, Alecia Van Helsing makes the ultimate sacrifice to protect the man she silently loves. Nothing is as it appeared.</p>
+      </div>
+      <div class="act-card">
+        <span class="act-num">Act V</span>
+        <h4>The Cruel Choice</h4>
+        <p>The Cathedral collapses. Will you release Mina to her eternal love — or strike down the King of Darkness? Your ending belongs to you alone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+
+<!-- ── ACT STRUCTURE (Game 2) ── -->
+<section>
+  <div class="section-wrap">
+    <div class="section-head">
+      <span class="section-label">Dracula II: The Inheritance</span>
+      <h2 class="section-title">The Story Behind the Story</h2>
+      <p class="section-body">London, 2026. A young artist. A three-hundred-year mission. A ritual that will take them back to where it all began.</p>
+    </div>
+
+    <div class="acts-grid">
+      <div class="act-card">
+        <span class="act-num">Prologue · London 2026</span>
+        <h4>The Road He's Always Drawn</h4>
+        <p>Jonathan Harker III has filled sketchbook after sketchbook with a road he's never walked and a woman he's never met. Alecia Van Helsing knocks on his door. She knows why.</p>
+      </div>
+      <div class="act-card">
+        <span class="act-num">Acts I–III · Wallachia 1431</span>
+        <h4>Arrival in the Cold</h4>
+        <p>The ritual takes them to a frozen plain beneath a fortress Jonathan has drawn from dreams for nine years. A household. A voivode. A priest whose warmth is never quite warm enough.</p>
+      </div>
+      <div class="act-card">
+        <span class="act-num">Act IV · Adrianople 1442</span>
+        <h4>The Ottoman Court</h4>
+        <p>Young Vlad and Radu are sent as hostages to the Ottoman Empire. Jonathan and Alecia follow — watching a boy either become the most dangerous man in Europe, or remain entirely himself.</p>
+      </div>
+      <div class="act-card">
+        <span class="act-num">Act V · Wallachia 1447</span>
+        <h4>What the Demon Costs</h4>
+        <p>Sixteen years of observation. Forty-seven half-seconds of cold in a corridor. The shape beneath the losses becomes visible. The pattern is now undeniable. The chain can be broken.</p>
+      </div>
+      <div class="act-card">
+        <span class="act-num">Act VI · London 2026</span>
+        <h4>The Return</h4>
+        <p>Back in the underground room where they started, with the chalk circles faded and London light through the crack in the ceiling. The history has changed. The grief hasn't. One question remains.</p>
+      </div>
+      <div class="act-card">
+        <span class="act-num">Post-Credits</span>
+        <h4>Not Luck</h4>
+        <p>Vlad and Elena's modern flat. Evening. He's cooking badly. She's correcting him. She tells him about a dream — two people, one drawing. "It made me think of you." He says: "Not luck. Something more reliable."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+
+<!-- ── ENDINGS ── -->
+<section id="endings">
+  <div class="section-wrap" style="padding-bottom: 40px;">
+    <div class="section-head">
+      <span class="section-label">Dracula II · Act VI</span>
+      <h2 class="section-title">Three Endings. Each One Earns It.</h2>
+      <p class="section-body">After 38 chapters and sixteen years inside the Drăculești household, you return to London with one question left. What do you do with what you know?</p>
+    </div>
+  </div>
+
+  <div style="max-width: 1120px; margin: 0 auto; padding: 0 24px 100px;">
+    <div class="endings-strip">
+
+      <div class="ending-card">
+        <span class="ending-letter">A</span>
+        <h4>The Quiet Life</h4>
+        <p>Keep the story between you. Seal the archive. Build a life in the house where the mission used to live. The story is real whether it is shared or not.</p>
+        <p class="ending-note">"Some things keep finding the right hands."</p>
+      </div>
+
+      <div class="ending-card">
+        <span class="ending-letter">B</span>
+        <h4>The Archive</h4>
+        <p>Write it all down. The demon's method. The forty-seven moments of cold. Instructions addressed to whoever comes after — or to nobody, which is the better outcome.</p>
+        <p class="ending-note">"Also: look after each other. Non-negotiable."</p>
+      </div>
+
+      <div class="ending-card">
+        <span class="ending-letter">C</span>
+        <h4>Find Them</h4>
+        <p>Locate Vlad and Elena in this life — ordinary people, no memory of anything. Watch them on a bench in Kensington Gardens. A book. An argument. A dog with opinions. Walk away.</p>
+        <p class="ending-note">Alive. Together. Home.</p>
+      </div>
+
+    </div>
+    <p style="text-align:center; color: var(--shadow-gray); font-style: italic; font-size: 15px; margin-top: 36px; padding: 0 20px;">
+      All three endings share the same epilogue: the history books rewritten, Vlad and Elena in Kensington Gardens, the ritual room empty at last. The choice is what you did with the story — not whether the story worked.
+    </p>
+  </div>
+</section>
+
+<!-- ── FREE BAND ── -->
+<div class="free-band">
+  <h2>Completely Free.</h2>
+  <p>No subscriptions. No registration. No energy timers. No locked chapters. One short ad per chapter — that's it. Every word of both stories is yours from the moment you open the app.</p>
+  <a href="https://apps.apple.com/app/id6755718958" class="cta-primary">Download on the App Store</a>
+  <div class="free-pills">
+    <span class="pill">No Registration</span>
+    <span class="pill">No Locked Chapters</span>
+    <span class="pill">No Energy Timers</span>
+    <span class="pill">Two Complete Games</span>
+    <span class="pill">6 Acts · 38 Chapters</span>
+  </div>
+</div>
+
+<!-- ── PRIVACY ── -->
 <section class="privacy-section" id="privacy">
   <h2>Privacy Policy</h2>
-  <p>Last Updated: December 2025</p>
-  
+  <p class="updated">Last Updated: February 2026</p>
+
   <h3>1. Data Collection and Usage</h3>
-  <p><strong>Dracula: King of Darkness</strong> is designed to respect your privacy. We do not collect, store, or share any personal identity data (such as names, phone numbers, or email addresses) from our players. Your narrative choices and game progress are stored locally on your device.</p>
-  
+  <p><strong>Interactive Stories: Sky ENG</strong> (including Dracula: King of Darkness and Dracula II: The Inheritance) is designed to respect your privacy. We do not collect, store, or share any personal identity data — such as names, phone numbers, or email addresses. Your narrative choices and game progress are stored locally on your device only.</p>
+
   <h3>2. Advertising and Tracking</h3>
-  <p>To support the development of this game, we display third-party advertisements. These ad partners may use device identifiers (such as Apple's IDFA) to provide personalized advertisements and analyze ad performance. You can manage your tracking preferences through your device settings or the App Tracking Transparency prompt upon launch.</p>
-  
+  <p>To support free development, we display third-party advertisements. Ad partners may use device identifiers (such as Apple's IDFA) to provide personalized advertisements and analyse ad performance. You can manage your tracking preferences through your device settings or the App Tracking Transparency prompt shown on launch.</p>
+
   <h3>3. Third-Party Services</h3>
-  <p>Aside from the advertising partners mentioned above, we do not share any data with third-party analytics or cloud services. We do not maintain any user profiles on external servers.</p>
-  
+  <p>Aside from advertising partners, we do not share any data with third-party analytics or cloud services. We do not maintain user profiles on external servers. No data from either game is transmitted beyond what the ad network requires.</p>
+
   <h3>4. Contact and Support</h3>
-  <p>If you contact our support team via email, we use your contact information solely to resolve your issue. We do not sell or use this information for marketing purposes. Contact us at: <a href="mailto:codelovin@outlook.com" style="color: var(--blood-red);">codelovin@outlook.com</a>.</p>
+  <p>If you contact our support team via email, we use your contact information solely to resolve your issue. We do not sell or use this information for marketing purposes. Contact us at: <a href="mailto:codelovin@outlook.com">codelovin@outlook.com</a></p>
 </section>
 
+<!-- ── FOOTER ── -->
 <footer>
+  <div class="footer-logo">Interactive Stories: Sky ENG</div>
   <div class="footer-links">
-    <a href="mailto:codelovin@outlook.com">Contact Support</a>
+    <a href="mailto:codelovin@outlook.com">Support</a>
     <a href="#privacy">Privacy Policy</a>
+    <a href="#games">Games</a>
+    <a href="#endings">Endings</a>
   </div>
-  <p class="footer-copy">&copy; 2025 Dracula: King of Darkness. All story elements derived from the original game script.</p>
+  <p class="footer-copy">&copy; 2026 Interactive Stories: Sky ENG. All story elements original. Dracula: King of Darkness &amp; Dracula II: The Inheritance.</p>
 </footer>
 
 </body>
