@@ -1792,10 +1792,10 @@
             <p>We do not collect personal identifiers such as your name or email address. To provide our entire library for free, we use third-party advertising via Google AdMob. One short ad is shown before each chapter is unlocked. Ad data handling is governed by Google's privacy policies.</p>
 
             <h3>App Tracking Transparency</h3>
-            <p>We implement Apple's App Tracking Transparency (ATT) framework on iOS. On first launch iOS users will be asked for permission to track activity across apps for personalised ad delivery. You can opt-out at any time via Settings → Privacy → Tracking on your iOS device. Opting out does not affect your ability to play any chapter. On Android, ad personalisation is managed by Google and can be adjusted via Settings → Google → Ads on your Android device.</p>
+            <p>We implement Apple's App Tracking Transparency (ATT) framework. On first launch you will be asked for permission to track activity across apps for personalised ad delivery. You can opt-out at any time via Settings → Privacy → Tracking on your iOS device. Opting out does not affect your ability to play any chapter.</p>
 
             <h3>Your Rights</h3>
-            <p>As the app collects no personal identifiers, there is no account to delete. Any ad-related data held by Google AdMob is subject to Google's data-deletion processes. For any privacy queries, contact us at <a href="/cdn-cgi/l/email-protection#284b474c4d44475e414668475d5c44474743064b4745" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="e4878b8081888b928d8aa48b9190888b8b8fca878b89">[email&#160;protected]</span></a>.</p>
+            <p>As the app collects no personal identifiers, there is no account to delete. Any ad-related data held by Google AdMob is subject to Google's data-deletion processes. For any privacy queries, contact us at <a href="mailto:codelovin@outlook.com" style="color:var(--gold)">codelovin@outlook.com</a>.</p>
         </div>
     </div>
 </section>
@@ -1808,7 +1808,7 @@
             <div class="logo-sub">Sky ENG</div>
         </div>
         <div class="footer-links">
-            <a href="/cdn-cgi/l/email-protection#fa99959e9f96958c9394ba958f8e96959591d4999597">Support</a>
+            <a href="mailto:codelovin@outlook.com">Support</a>
             <a href="#privacy">Privacy Policy</a>
             <a href="https://apps.apple.com/app/interactive-stories-skyeng/id6759555208" class="appstore-btn"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on App Store" style="height:32px;"></a>
         </div>
@@ -1832,7 +1832,7 @@
     </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
     // Custom cursor
     const cd = document.getElementById('cd');
     const cr = document.getElementById('cr');
@@ -1878,4 +1878,15 @@
     // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver(entries => {
-        entries.forE
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
